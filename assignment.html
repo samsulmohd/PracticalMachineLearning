@@ -170,8 +170,9 @@ sub_test &lt;- train_set[-sub_train_set, ]</code></pre>
 <h2>Modeling</h2>
 <div id="using-random-forest" class="section level3">
 <h3>Using Random Forest</h3>
-<pre class="r"><code>control_rf &lt;- randomForest(classe ~. , data = sub_train, method = &quot;class&quot;) 
-predict_rf &lt;- predict(control_rf, sub_test, type = &quot;class&quot;)   # Predicting
+<p>Random Forest is selected based on the acuracy and most common model used.</p>
+<pre class="r"><code>model_rf &lt;- randomForest(classe ~. , data = sub_train, method = &quot;class&quot;) 
+predict_rf &lt;- predict(model_rf, sub_test, type = &quot;class&quot;)   # Predicting
 confusionMatrix(predict_rf, sub_test$classe)   # Test result using sub_test</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
@@ -205,6 +206,15 @@ confusionMatrix(predict_rf, sub_test$classe)   # Test result using sub_test</cod
 ## Detection Prevalence   0.2851   0.1946   0.1750   0.1616   0.1837
 ## Balanced Accuracy      0.9991   0.9966   0.9937   0.9920   0.9990</code></pre>
 </div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Applying model to test set found the result is 100%.</p>
+<pre class="r"><code>predict_test &lt;- predict(model_rf, test_set, type=&quot;class&quot;)
+predict_test</code></pre>
+<pre><code>##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 
+##  B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B 
+## Levels: A B C D E</code></pre>
 </div>
 
 

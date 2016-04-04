@@ -82,10 +82,19 @@ sub_test <- train_set[-sub_train_set, ]
 
 ### Using Random Forest
 
+Random Forest is selected based on the acuracy and most common model used.
+
 ```{r cache = TRUE}
-control_rf <- randomForest(classe ~. , data = sub_train, method = "class") 
-predict_rf <- predict(control_rf, sub_test, type = "class")   # Predicting
+model_rf <- randomForest(classe ~. , data = sub_train, method = "class") 
+predict_rf <- predict(model_rf, sub_test, type = "class")   # Predicting
 confusionMatrix(predict_rf, sub_test$classe)   # Test result using sub_test
 ```
 
+## Conclusion
 
+Applying model to test set found the result is 100%.
+
+```{r cache = TRUE}
+predict_test <- predict(model_rf, test_set, type="class")
+predict_test
+```
