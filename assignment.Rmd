@@ -24,14 +24,14 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 The goal of your project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases.
 
-## Loading the library 
+## Loading the library and set.seed
 
 ```{r cache = TRUE}
 library(caret)
-library(ggplot2)
+set.seed(6050)
 ```
 
-## Getting and Cleaning the data
+## Getting the data
 
 Missing values as "NA","" and "#DIV/0!" were threated as NA.
 
@@ -49,14 +49,43 @@ if (!file.exists("pml-testing.csv")){
 test_set <- read.csv(file ="pml-testing.csv", header=TRUE, na.strings=c("NA", ""))
 ```
 
-Running str shows that data 
+## Cleaning the Data
+
+Running str shows that data need clean up.
 
 ```{r cache = TRUE, eval=FALSE}
 str(train_set)
 str(test_set)
 ```
 
-## Cleaning the Data
+Clean the data and remove column 1:7 as they are info about user.
 
+```{r cache = TRUE}
+train_set <- train_set[, colSums(is.na(train_set)) == 0] 
+test_set <- test_set[, colSums(is.na(test_set)) == 0] 
+
+train_set <-train_set[, -c(1:7)]
+test_set <-test_set[, -c(1:7)]
+```
+
+## Split the data for validation
+
+Split the train_set as 70% training data set and 30% validation data set.
+
+```{r cache = TRUE}
+sub_train_set <- createDataPartition(train_set$classe, p=0.7, list=FALSE)
+sub_train <- train_set[sub_train_set, ] 
+sub_test <- train_set[-sub_train_set, ]
+```
+
+## Modeling 
+
+### Using Random Forest
+
+```{r cache = TRUE}
+control_rf <- randomForest(classe ~. , data = sub_train, method = "class") 
+predict_rf <- predict(control_rf, sub_test, type = "class")   # Predicting
+confusionMatrix(predict_rf, sub_test$classe)   # Test result using sub_test
+```
 
 

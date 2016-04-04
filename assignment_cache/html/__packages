@@ -2,4 +2,4 @@ base
 lattice
 ggplot2
 caret
-curl
+randomForest
